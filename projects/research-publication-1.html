@@ -3,9 +3,9 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Research publication project page for Samuel Li.">
-    <title>Research Publication One | Samuel Li</title>
-    <link rel="stylesheet" href="../styles.css">
+    <meta name="description" content="Characterizing Opinion Evolution of Networked LLMs project page for Samuel Li.">
+    <title>Characterizing Opinion Evolution of Networked LLMs | Samuel Li</title>
+    <link rel="stylesheet" href="../styles.css?v=20260618-layout">
   </head>
   <body>
     <header class="site-header">
@@ -13,6 +13,7 @@
         <a class="site-name" href="../index.html">Samuel Li</a>
         <div class="nav-links">
           <a href="../index.html#about">About</a>
+          <a href="../index.html#research">Research</a>
           <a href="../index.html#projects">Projects</a>
           <a href="../index.html#experience">Experience</a>
           <a href="../index.html#contact">Contact</a>
@@ -21,26 +22,45 @@
     </header>
 
     <main class="page project-page">
-      <a class="back-link" href="../index.html#projects">Back to projects</a>
+      <a class="back-link" href="../index.html#research">Back to research</a>
       <section class="project-header">
-        <h1>Research Publication Title One</h1>
-        <p>Authors, venue, and publication status to add.</p>
+        <h1>Characterizing Opinion Evolution of Networked LLMs</h1>
+        <p class="paper-authors">Samuel Li et al.</p>
+        <p class="paper-venue">Manuscript under review</p>
       </section>
 
       <section class="detail-grid">
         <h2>Summary</h2>
         <p>
-          Placeholder for a plain-English explanation of the research question, method, main result,
-          and why the work matters.
+          LLMs are increasingly appearing in multi-agent simulations, influence settings, and
+          AI-native social platforms, where their responses can shape one another. We ask whether
+          classical opinion-dynamics models provide a principled way to explain and forecast how
+          stances evolve in networks of interacting LLM agents.
+        </p>
+      </section>
+
+      <section class="detail-grid">
+        <h2>Finding</h2>
+        <p>
+          Basic averaging models miss a key part of the behavior. Across model families, discussion
+          topics, and network structures, adding a model-specific innate opinion bias explains the
+          observed stance trajectories much better, reducing mean opinion error by up to 88%.
+        </p>
+      </section>
+
+      <section class="detail-grid">
+        <h2>My role</h2>
+        <p>
+          My work focused on the simulation and modeling pipeline: generating networked LLM
+          discussions, logging posts, stances, and topology data, and fitting opinion-dynamics
+          models to compare predicted and observed stance trajectories.
         </p>
       </section>
 
       <section class="detail-grid">
         <h2>Artifacts</h2>
         <ul>
-          <li>Paper link.</li>
-          <li>Code repository.</li>
-          <li>Poster, slides, dataset, or project website.</li>
+          <li><a href="https://github.com/samuelLi05/llm-network">Simulation and modeling repository</a></li>
         </ul>
       </section>
     </main>

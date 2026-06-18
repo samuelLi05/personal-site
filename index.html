@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="Personal portfolio for Samuel Li.">
     <title>Samuel Li</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles.css?v=20260618-layout">
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
@@ -21,6 +21,7 @@
         </button>
         <div class="nav-links" id="nav-links" data-nav-menu>
           <a href="#about">About</a>
+          <a href="#research">Research</a>
           <a href="#projects">Projects</a>
           <a href="#experience">Experience</a>
           <a href="#contact">Contact</a>
@@ -30,21 +31,18 @@
 
     <main id="main" class="page">
       <section class="profile" id="about" aria-labelledby="profile-title">
-        <div class="profile-photo" aria-label="Profile photo placeholder">
-          <span>Photo</span>
-        </div>
+        <img class="profile-photo" src="assets/profile.jpg" alt="Samuel Li">
 
         <div class="profile-copy">
           <h1 id="profile-title">Samuel Li</h1>
           <p class="subtitle">Software engineer and researcher</p>
           <p>
-            I am building this site as a concise home for engineering projects, research publications,
-            Formula SAE work, professional experience, and contact information. The language here is
-            placeholder text until the resume and final project notes are added.
+            I am a junior Electrical and Computer Engineering major at The University of Texas at
+            Austin, where I am part of the ECE Honors Program and Engineering Honors.
           </p>
           <p>
-            My interests include applied software systems, robotics and vehicle engineering, research
-            tooling, and projects where code connects to real-world hardware or decision-making.
+            My interests include AI/ML engineering and research, systems software, and infrastructure,
+            especially work that connects intelligent software with reliable, production-quality systems.
           </p>
 
           <ul class="contact-list" id="contact" aria-label="Contact information">
@@ -56,10 +54,60 @@
         </div>
       </section>
 
+      <section class="content-section" id="research" aria-labelledby="research-title">
+        <div class="section-heading">
+          <h2 id="research-title">Research</h2>
+        </div>
+
+        <div class="research-list">
+          <article class="research-entry">
+            <div class="entry-body">
+              <h3><a href="projects/research-publication-1.html">Characterizing Opinion Evolution of Networked LLMs</a></h3>
+              <p class="paper-authors">Samuel Li et al.</p>
+              <p class="paper-venue">Manuscript under review</p>
+              <p>
+                We study opinion evolution in networks of LLM agents, where each agent holds a stance
+                and updates it after seeing messages from its neighbors. We fit classical
+                opinion-dynamics models to these trajectories to test which mechanisms best explain
+                how opinions propagate in LLM networks.
+              </p>
+              <p class="entry-links">
+                <a href="projects/research-publication-1.html">Project page</a>
+                <a href="https://github.com/samuelLi05/llm-network">Code</a>
+              </p>
+              <a class="research-figure" href="projects/research-publication-1.html" aria-label="Characterizing Opinion Evolution of Networked LLMs project page">
+                <img src="assets/research/opinion-evolution-preview.png" width="3640" height="2496" alt="Out-of-sample prediction error across opinion dynamics models">
+              </a>
+            </div>
+          </article>
+
+          <article class="research-entry">
+            <div class="entry-body">
+              <h3><a href="projects/research-publication-2.html">Foundation Models for Logistics Operations</a></h3>
+              <p class="paper-authors">Yunhao Yang, Neel P. Bhatt, Christian Ellis, Samuel Li, Alvaro Velasquez, Zhangyang Wang, Ufuk Topcu</p>
+              <p class="paper-venue">NeuS 2026</p>
+              <p>
+                We propose a framework that combines the flexibility of vision-language foundation
+                models with the reliability of formal logistics planners. The system estimates when a
+                user's intent is unclear, asks for clarification when needed, and uses those confidence
+                signals to tune the model toward the intended task.
+              </p>
+              <p class="entry-links">
+                <a href="projects/research-publication-2.html">Project page</a>
+                <a href="https://arxiv.org/pdf/2507.11352">Paper</a>
+                <a href="https://github.com/samuelLi05/airplane_simulator">Code</a>
+              </p>
+              <a class="research-figure" href="projects/research-publication-2.html" aria-label="Foundation Models for Logistics Operations project page">
+                <img src="assets/research/intent-verification-preview.png?v=20260618-layout" width="720" height="267" alt="Intent verification loop diagram">
+              </a>
+            </div>
+          </article>
+        </div>
+      </section>
+
       <section class="content-section" id="projects" aria-labelledby="projects-title">
         <div class="section-heading">
-          <h2 id="projects-title">Projects and Publications</h2>
-          <p>Selected work. Each entry can link to a deeper project page, paper, repository, or demo.</p>
+          <h2 id="projects-title">Projects</h2>
         </div>
 
         <div class="entry-list">
@@ -76,44 +124,6 @@
               </p>
               <p class="entry-links">
                 <a href="projects/formula-sae.html">Project page</a>
-              </p>
-            </div>
-          </article>
-
-          <article class="entry">
-            <a class="entry-thumb" href="projects/research-publication-1.html" aria-label="Research publication one page">
-              <span>Paper</span>
-            </a>
-            <div class="entry-body">
-              <h3><a href="projects/research-publication-1.html">Research Publication Title One</a></h3>
-              <p class="entry-meta">Authors to add. Venue or status to add.</p>
-              <p>
-                Summary slot for the first research publication: research question, methods, contribution,
-                and links to the paper or code.
-              </p>
-              <p class="entry-links">
-                <a href="projects/research-publication-1.html">Project page</a>
-                <a href="#">Paper</a>
-                <a href="#">Code</a>
-              </p>
-            </div>
-          </article>
-
-          <article class="entry">
-            <a class="entry-thumb" href="projects/research-publication-2.html" aria-label="Research publication two page">
-              <span>Paper</span>
-            </a>
-            <div class="entry-body">
-              <h3><a href="projects/research-publication-2.html">Research Publication Title Two</a></h3>
-              <p class="entry-meta">Authors to add. Venue or status to add.</p>
-              <p>
-                Summary slot for the second research publication, with room for citation details,
-                artifacts, and a concise plain-English explanation.
-              </p>
-              <p class="entry-links">
-                <a href="projects/research-publication-2.html">Project page</a>
-                <a href="#">Paper</a>
-                <a href="#">Code</a>
               </p>
             </div>
           </article>
@@ -158,29 +168,61 @@
       <section class="content-section" id="experience" aria-labelledby="experience-title">
         <div class="section-heading">
           <h2 id="experience-title">Experience</h2>
-          <p>Professional, academic, and technical roles will be added from the resume.</p>
+          <p>Professional, research, and engineering roles.</p>
         </div>
 
         <ol class="timeline">
           <li>
-            <div class="time">Current</div>
+            <div class="time">May 2026 - Aug 2026</div>
             <div>
-              <h3>Role or organization</h3>
-              <p>Short description of responsibilities, technical scope, and impact.</p>
+              <h3>Firmware Engineer Intern, Hewlett Packard Enterprise</h3>
+              <ul>
+                <li>Extended an EDK2-based UEFI shell in C by integrating libc and Python for platform validation and debugging.</li>
+                <li>Validated UEFI firmware with Intel Simics and hardware ROM flashing on Intel and AMD server platforms.</li>
+              </ul>
             </div>
           </li>
           <li>
-            <div class="time">Previous</div>
+            <div class="time">Sept 2025 - Present</div>
             <div>
-              <h3>Role or organization</h3>
-              <p>Another experience entry, written for quick scanning rather than a full resume dump.</p>
+              <h3>Research Assistant, Autonomous Systems Group, UT Austin</h3>
+              <ul>
+                <li>Researching LLM autonomous systems, with focus on NLP, opinion dynamics, and human-AI interaction.</li>
+                <li>Built Python simulation and prediction pipelines using Hugging Face Transformers, SBERT, CVXPY, SciPy, contrastive learning, DPO, and uncertainty estimation.</li>
+                <li>Co-author on submitted or accepted work for EMNLP 2026 and NeuS 2026.</li>
+              </ul>
             </div>
           </li>
           <li>
-            <div class="time">Education</div>
+            <div class="time">May 2025 - Aug 2025</div>
             <div>
-              <h3>School or program</h3>
-              <p>Degree, concentration, lab, team, coursework, or honors can go here.</p>
+              <h3>Software Engineer Intern, Electronic Arts</h3>
+              <ul>
+                <li>Architected a multi-agent LLM CI/CD optimization system in Python that selectively ran build targets and reduced pipeline runtime by about 75%.</li>
+                <li>Built async MCP servers for LLM tool-calling access to GitLab and Jenkins.</li>
+                <li>Implemented RAG-based technical assistants and deployed production systems through GitLab CI runners.</li>
+              </ul>
+            </div>
+          </li>
+          <li>
+            <div class="time">Sept 2024 - Present</div>
+            <div>
+              <h3>Lead Software Engineer, Longhorn Racing Electric</h3>
+              <ul>
+                <li>Architected a real-time Formula SAE telemetry system streaming CAN bus data from Rust embedded systems to cloud analytics via MQTT, Protobuf, and 5G.</li>
+                <li>Engineered Python and Go Kafka pipelines with PostgreSQL and gRPC for 100 Hz ingestion across 60,000 data points per second.</li>
+                <li>Used Bazel and Docker to containerize and deploy modular telemetry microservices.</li>
+              </ul>
+            </div>
+          </li>
+          <li>
+            <div class="time">June 2024 - Aug 2024</div>
+            <div>
+              <h3>Research Intern, Applied Research Laboratories, UT Austin</h3>
+              <ul>
+                <li>Developed PyTorch computer vision pipelines for drone-based visible and thermal imagery.</li>
+                <li>Implemented U-Net thermal segmentation, unsupervised gradient-based clustering, and an OpenCV Structure from Motion pipeline for aerial 3D reconstruction.</li>
+              </ul>
             </div>
           </li>
         </ol>
