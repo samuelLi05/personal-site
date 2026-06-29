@@ -35,21 +35,20 @@
 
         <div class="profile-copy">
           <h1 id="profile-title">Samuel Li</h1>
-          <p class="subtitle">Software engineer and researcher</p>
+          <p class="subtitle">ECE student</p>
           <p>
-            I am a junior Electrical and Computer Engineering major at The University of Texas at
-            Austin, where I am part of the ECE Honors Program and Engineering Honors.
+            I am an Electrical and Computer Engineering major at The University of Texas at
+            Austin, where I am part of the ECE Honors Program and Engineering Honors Program.
           </p>
-          <p>
-            My interests include AI/ML engineering and research, systems software, and infrastructure,
-            especially work that connects intelligent software with reliable, production-quality systems.
+          <p>I'm particularly interested in ML infrastructure, Gen AI, and systems programming.
+             At UT Austin, I am involved in undergraduate research and am a system lead on Longhorn Racing Electric - FSAE EV. 
+             Outside of school, I enjoy playing pickleball and watching sports. 
           </p>
 
           <ul class="contact-list" id="contact" aria-label="Contact information">
-            <li><a href="mailto:hello@example.com">hello@example.com</a></li>
-            <li><a href="#" aria-label="GitHub profile placeholder">GitHub</a></li>
-            <li><a href="#" aria-label="LinkedIn profile placeholder">LinkedIn</a></li>
-            <li><a href="#" aria-label="Resume placeholder">Resume</a></li>
+            <li><a href="mailto:samuel.li.atx@gmail.com">samuel.li.atx@gmail.com</a></li>
+            <li><a href="https://github.com/samuelLi05">GitHub</a></li>
+            <li><a href="https://www.linkedin.com/in/samuel-li-ece">LinkedIn</a></li>
           </ul>
         </div>
       </section>
@@ -114,7 +113,7 @@
               <h3><a href="projects/formula-sae.html">Formula SAE Engineering Work</a></h3>
               <p class="entry-meta">Telemetry, distributed systems, data infrastructure</p>
               <p>
-                Distributed Formula SAE telemetry architecture connecting BEVO on-car acquisition, MQTT,
+                Distributed Formula SAE telemetry architecture connecting on-car data acquisition, MQTT,
                 PostgreSQL, Kafka, Grafana dashboards, and live analysis applications.
               </p>
               <p class="entry-links">
@@ -126,14 +125,14 @@
 
           <article class="entry">
             <div class="entry-body">
-              <h3><a href="projects/software-project.html">Contrastive Audio Diffusion</a></h3>
+              <h3><a href="projects/contrastive-audio-diffusion.html">Contrastive Audio Diffusion</a></h3>
               <p class="entry-meta">PyTorch, diffusion models, audio ML, Django</p>
               <p>
                 Conditional waveform diffusion project with NSynth preprocessing, 1D U-Net denoising,
                 contrastive label alignment, and an interactive inference demo.
               </p>
               <p class="entry-links">
-                <a href="projects/software-project.html">Project page</a>
+                <a href="projects/contrastive-audio-diffusion.html">Project page</a>
                 <a href="https://github.com/samuelLi05/contrastive-audio-diffusion">Repository</a>
                 <a href="https://medium.com/@zacharyhoulton/audio-denoising-using-diffusion-c2ae04d20c4e">Audio examples</a>
               </p>
@@ -142,14 +141,14 @@
 
           <article class="entry">
             <div class="entry-body">
-              <h3><a href="projects/selected-project.html">Galactic Cruiser</a></h3>
+              <h3><a href="projects/galactic-cruiser.html">Galactic Cruiser</a></h3>
               <p class="entry-meta">MSPM0G3507, embedded C/C++, ST7735, DAC audio</p>
               <p>
                 Class-winning ECE319H embedded handheld game built with Travis Edwards on a TI MSPM0 LaunchPad,
                 using direct hardware input, display rendering, and microcontroller-driven feedback.
               </p>
               <p class="entry-links">
-                <a href="projects/selected-project.html">Project page</a>
+                <a href="projects/galactic-cruiser.html">Project page</a>
                 <a href="https://www.youtube.com/watch?v=nRzOsRi6nyw">Demo video</a>
               </p>
             </div>
@@ -169,8 +168,9 @@
             <div>
               <h3>Firmware Engineer Intern, Hewlett Packard Enterprise</h3>
               <ul>
-                <li>Extended an EDK2-based UEFI shell in C by integrating libc and Python for platform validation and debugging.</li>
-                <li>Validated UEFI firmware with Intel Simics and hardware ROM flashing on Intel and AMD server platforms.</li>
+                <li>Extended HPE's EDK2-based UEFI shell in C by integrating libc and Python for platform validation and debugging.</li>
+                <li>Expanded edk2-libc CPython runtime coverage by porting LZMA, SQLite, and OpenSSL-backed SSL/TLS support while evaluating compatibility with newer CPython versions.</li>
+                <li>Validated UEFI firmware using Intel Simics and hardware-based ROM flashing on Intel and AMD server platforms. </li>
               </ul>
             </div>
           </li>
@@ -179,9 +179,12 @@
             <div>
               <h3>Research Assistant, Autonomous Systems Group, UT Austin</h3>
               <ul>
-                <li>Researching LLM autonomous systems, with focus on NLP, opinion dynamics, and human-AI interaction.</li>
-                <li>Built Python simulation and prediction pipelines using Hugging Face Transformers, SBERT, CVXPY, SciPy, contrastive learning, DPO, and uncertainty estimation.</li>
-                <li>Co-author on submitted or accepted work for EMNLP 2026 and NeuS 2026.</li>
+                <li>Conducted research on LLM autonomous systems, focusing on NLP, opinion dynamics, and human-AI interaction.</li>
+                <li>Built a simulation framework in Python using Hugging Face Transformers and SBERT to model stance evolution in social networks composed of LLM agents.</li>
+                <li>Designed opinion prediction pipelines using convex optimization with CVXPY and SLSQP optimization with SciPy to estimate agent influence and predict opinion evolution in LLM social networks.</li>
+                <li>Developed confidence-aware decision-making pipelines using contrastive learning, DPO, and uncertainty estimation to improve agent planning and user intent understanding.</li>
+                <li>Co-author on "Characterizing Opinion Evolution of Networked LLMs" (Submitted to EMNLP 2026).</li>
+                <li>Co-author on "Foundation Models for Logistics Operations: Toward Certifiable, Conversational Interfaces" (NeuS 2026).</li>
               </ul>
             </div>
           </li>
@@ -190,9 +193,9 @@
             <div>
               <h3>Software Engineer Intern, Electronic Arts</h3>
               <ul>
-                <li>Architected a multi-agent LLM CI/CD optimization system in Python that selectively ran build targets and reduced pipeline runtime by about 75%.</li>
-                <li>Built async MCP servers for LLM tool-calling access to GitLab and Jenkins.</li>
-                <li>Implemented RAG-based technical assistants and deployed production systems through GitLab CI runners.</li>
+                <li>Architected a multi-agent LLM CI/CD optimization system in Python using conditional compilation checks and RAG-based code cross-referencing to selectively run build targets, cutting pipeline runtime by ~75%.</li>
+                <li>Built async MCP servers in Python to provide LLM agents with tool-calling access to GitLab and Jenkins.</li>
+                <li>Implemented RAG-based technical assistants and deployed production systems via GitLab CI runners.</li>
               </ul>
             </div>
           </li>
@@ -201,9 +204,9 @@
             <div>
               <h3>Lead Software Engineer, Longhorn Racing Electric</h3>
               <ul>
-                <li>Architected a real-time Formula SAE telemetry system streaming CAN bus data from Rust embedded systems to cloud analytics via MQTT, Protobuf, and 5G.</li>
-                <li>Engineered Python and Go Kafka pipelines with PostgreSQL and gRPC for 100 Hz ingestion across 60,000 data points per second.</li>
-                <li>Used Bazel and Docker to containerize and deploy modular telemetry microservices.</li>
+                <li>Architected a real-time vehicular telemetry system, streaming CAN bus data from Rust-based embedded systems to the cloud via MQTT, Protobuf, and 5G to enable analytics pipelines and data-driven engineering decisions.</li>
+                <li>Engineered real-time Python/Go Kafka pipelines with PostgreSQL and gRPC for high-throughput data ingestion at 100 Hz across 60,000 data points/sec.</li>
+                <li>Leveraged Bazel and Docker to containerize and deploy the telemetry infrastructure through modular microservices.</li>
               </ul>
             </div>
           </li>
@@ -212,13 +215,15 @@
             <div>
               <h3>Research Intern, Applied Research Laboratories, UT Austin</h3>
               <ul>
-                <li>Developed PyTorch computer vision pipelines for drone-based visible and thermal imagery.</li>
-                <li>Implemented U-Net thermal segmentation, unsupervised gradient-based clustering, and an OpenCV Structure from Motion pipeline for aerial 3D reconstruction.</li>
+                <li>Developed computer vision pipelines in PyTorch to process drone-based visible and thermal imagery.</li>
+                <li>Implemented U-Net CNN for thermal segmentation and unsupervised gradient-based clustering for visible imagery.</li>
+                <li>Engineered a Structure from Motion (SfM) pipeline using OpenCV to generate 3D reconstructions from aerial data.</li>
               </ul>
             </div>
           </li>
         </ol>
       </section>
+
     </main>
 
     <footer class="footer">

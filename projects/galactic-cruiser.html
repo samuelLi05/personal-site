@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Galactic Cruiser embedded systems project page for Samuel Li.">
+    <title>Galactic Cruiser Embedded System | Samuel Li</title>
+    <link rel="stylesheet" href="../styles.css?v=20260618-layout">
+  </head>
+  <body>
+    <header class="site-header">
+      <nav class="nav" aria-label="Primary navigation">
+        <a class="site-name" href="../index.html">Samuel Li</a>
+        <div class="nav-links">
+          <a href="../index.html#about">About</a>
+          <a href="../index.html#projects">Projects</a>
+          <a href="../index.html#experience">Experience</a>
+          <a href="../index.html#contact">Contact</a>
+        </div>
+      </nav>
+    </header>
+
+    <main class="page project-page portfolio-project-page">
+      <a class="back-link" href="../index.html#projects">Back to projects</a>
+      <section class="project-header">
+        <h1>Galactic Cruiser</h1>
+        <p>Embedded game system on the TI MSPM0G3507 LaunchPad.</p>
+        <p class="paper-authors">Samuel Li and Travis Edwards</p>
+        <p class="paper-venue">Class winner, ECE319H embedded handheld competition at UT Austin</p>
+        <p class="project-actions">
+          <a href="https://github.com/samuelLi05/ECE319H_Final_Project">Code</a>
+          <a href="https://www.youtube.com/watch?v=nRzOsRi6nyw">Demo video</a>
+        </p>
+      </section>
+
+      <figure class="project-figure video-figure">
+        <div class="video-frame">
+          <iframe
+            src="https://www.youtube.com/embed/nRzOsRi6nyw"
+            title="ECE 319H Final Project - Galactic Cruiser"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowfullscreen></iframe>
+        </div>
+        <figcaption>Final embedded game demo running on hardware.</figcaption>
+      </figure>
+
+      <section class="architecture-sections" aria-label="Galactic Cruiser embedded architecture">
+        <article class="architecture-section">
+          <h2>Game Structure</h2>
+          <p>
+            Galactic Cruiser uses a modular structure in which the different elements of the game are encapsulated
+            in their own `.cpp` and `.h` files. We implemented a `Player` class, a `Stars` class, and an
+            `Asteroid` class. By separating each of the graphical elements into its own class, we could control
+            how movement was achieved, whether by simply redrawing the sprite with its border or by drawing the
+            sprite and then drawing a blank box over its previous location. This was important on the ST7735
+            display because movement is not abstracted away by an engine; we have to decide exactly how each
+            object is updated on screen.
+          </p>
+          <p>
+            We have a shared bounding box class that handles collision logic for all objects, while the game
+            state itself is encapsulated in the main program. Control logic is done by setting global flags
+            that note important states such as whether a collision occurred, if a player achieved 100%
+            completion, and whether the timer had reached zero. By having flags explicitly for these scenarios,
+            we can ensure correct logic when it comes to the current state of the game.
+          </p>
+          <p>
+            The logic we used for updating the screen also follows controlled flow. In the asteroid class,
+            we have 3 asteroid variables that are initially set to `NULL` and, after they pass a certain
+            `x` and `y` value, get reset to `NULL`. Whenever an asteroid object is `NULL`, the program chooses
+            a new spawning point for that asteroid. This controlled logic ensures that only 3 asteroids are
+            on the screen at any given time. We use the same idea more generally throughout the game: objects
+            are only updated once the data they depend on has already been produced, and if something has not
+            yet been reinitialized, it either retains its last valid value or falls back to its default state.
+          </p>
+        </article>
+
+        <article class="architecture-section">
+          <h2>Hardware Bring-Up</h2>
+          <p>
+            We structured the development of the game around each respective hardware component and got
+            baseline features of the hardware to work in relation to the software. We developed driver code
+            for I2C to interface with the gyroscope as well as ST7735 display code to create the stars and
+            background effects for the game. We then assembled all hardware features on a PCB and individually
+            tested the functionality of the DAC, switches, LEDs, and analog input paths with driver code from
+            previous 319K labs.
+          </p>
+          <p>
+            Since the main functionality of the game is the display in relation to gyroscope readings, we
+            then modularized the gyroscope and display code so that they could be run together in the main
+            function. Gyroscope readings are captured through a timer interrupt, read over `I2C1`, and then
+            processed by the `Player` class before being reflected on the display. In the current codebase,
+            the ADXL345 path is configured into measurement mode and read in 6-byte bursts so that `x`, `y`,
+            and `z` motion data can be recovered efficiently. From there, we incrementally added the SlidePot
+            for aiming, switch input, LED output, and sound so that each addition did not conflict with the
+            other game features. All ST7735 output is kept in main so that display writes stay serialized and
+            do not interfere with interrupt timing.
+          </p>
+        </article>
+
+        <article class="architecture-section">
+          <h2>Logic Flow</h2>
+          <p>
+            We had to develop an ordering of functions to call to ensure a sequential flow of data such that
+            data-dependent game features could only be called if the data had already been processed through
+            previous functions. Our ordering of game functions is background refreshing, player movement,
+            player shooting, enemy initialization and movement, and lastly collisions.
+          </p>
+          <p>
+            In this format, each function directly depends on data from previous calls. However, if data is
+            not correctly initialized, it retains either its past value or the default value assigned before
+            the game loop runs. That ordering was important for keeping motion, spawning, shooting, and
+            collision handling consistent on the MSPM0 runtime.
+          </p>
+        </article>
+
+        <article class="architecture-section">
+          <h2>Controls And Iteration</h2>
+          <p>
+            To make the game fun to play, we considered how to make it intuitive and easy to learn while still
+            being difficult to master. We did this by intentionally mapping which physical controls were
+            responsible for each gameplay element, which eventually led us to use the gyroscope for player
+            movement and the SlidePot for aiming.
+          </p>
+          <p>
+            We tested the game by having other peers try it and give us feedback, then tuned the game from
+            there. One suggestion we implemented was making the game wireless, which we achieved by using a
+            remote AA battery pack as the power source. That made the control scheme feel much more natural
+            during playtesting and better matched the handheld format of the project.
+          </p>
+        </article>
+      </section>
+    </main>
+  </body>
+</html>

@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Contrastive Audio Diffusion project page for Samuel Li.">
+    <title>Contrastive Audio Diffusion | Samuel Li</title>
+    <link rel="stylesheet" href="../styles.css?v=20260618-layout">
+  </head>
+  <body>
+    <header class="site-header">
+      <nav class="nav" aria-label="Primary navigation">
+        <a class="site-name" href="../index.html">Samuel Li</a>
+        <div class="nav-links">
+          <a href="../index.html#about">About</a>
+          <a href="../index.html#projects">Projects</a>
+          <a href="../index.html#experience">Experience</a>
+          <a href="../index.html#contact">Contact</a>
+        </div>
+      </nav>
+    </header>
+
+    <main class="page project-page portfolio-project-page">
+      <a class="back-link" href="../index.html#projects">Back to projects</a>
+      <section class="project-header">
+        <h1>Contrastive Audio Diffusion</h1>
+        <p>Contrastive conditional waveform diffusion for audio denoising and generation on Google's NSynth dataset.</p>
+        <p class="paper-authors">Samuel Li, Zachary Houlton, Ariv Mondal, Daniel Zhu</p>
+        <p class="project-actions">
+          <a href="https://github.com/samuelLi05/contrastive-audio-diffusion">Code</a>
+          <a href="https://medium.com/@zacharyhoulton/audio-denoising-using-diffusion-c2ae04d20c4e">Medium writeup and audio examples</a>
+        </p>
+      </section>
+
+      <section class="architecture-sections" aria-label="Contrastive audio diffusion architecture">
+        <article class="architecture-section">
+          <h2>Background</h2>
+          <p>
+            Audio recordings often contain background noise that makes it hard to clearly hear or isolate
+            specific sounds. Traditional denoising methods can struggle to preserve important information,
+            so we explore diffusion models, which learn to remove noise step-by-step while reconstructing
+            cleaner audio. Using the NSynth dataset, which includes labels for each instrument, we tell
+            the model what instrument it is working on so it can keep the sound characteristics of that
+            instrument while removing noise. Our goal is to evaluate how well diffusion-based methods
+            improve audio clarity compared to simpler approaches. In the future, this approach could be
+            extended to real-world audio recordings with even more complex background noise.
+          </p>
+          <p>
+            Many leading commercial audio diffusion models are trained using server-hardware, with large
+            clusters of GPUs. A goal for our project is to create such a contrastive conditional model
+            that is capable of being trained on consumer hardware, only requiring ~16 GB of VRAM. We drew
+            inspiration from Christopher Landschoot's "Tiny Audio Diffusion" project, which provides a
+            great baseline with its architecture being able to produce small audio samples with less than
+            2 GB of VRAM. Since we aim to train a contrastive conditional model, we increase parameter
+            count and complexity to reach this goal of creating a diffusion model still with intent of
+            running on smaller audio samples.
+          </p>
+        </article>
+
+        <article class="architecture-section">
+          <h2>Dataset And Preprocessing</h2>
+          <p>
+            We use the NSynth dataset which features over 300,000 music notes played by 11 instrument
+            classes, varying in pitch and style. Each note in the NSynth dataset is stored as a 4-second,
+            16 kHz WAV file. Our custom preprocessing pipeline reads NSynth JSON metadata and selects a
+            subset of samples per class, applies one-hot conditioning to the instrument classes, and saves
+            the waveforms as PyTorch tensors.
+          </p>
+          <p>
+            For our model's inputs, we inject differing amounts of noise into our input waveforms to create
+            pairs of differing noise levels, their one-hot encoded conditioning vector, and the output
+            cleaned waveform. This allows the later mentioned diffusion model to learn at various noise
+            levels, and thus allows our diffusion process to function on varying levels of noise. This is
+            important at creating varied and accurate audio representations independent of the innate noise
+            within audio samples.
+          </p>
+        </article>
+
+        <article class="architecture-section">
+          <h2>Model Architecture</h2>
+          <p>
+            We built our model off of Archinet's <a href="https://github.com/archinetai/audio-diffusion-pytorch">audio-diffusion-pytorch</a>
+            library similarly done in the "Tiny Audio Diffusion" project. However, here our goal is to
+            expand on the diffusion capabilities of the baseline models by creating contrastive diffusion models.
+          </p>
+          <p>Our model's architecture is split into 2 sections: an InfoNCE styled contrastive block and U-Net self attention block.</p>
+          <h3>InfoNCE Contrastive Loss Block</h3>
+          <p>
+            Our dataset consisted of input clean waveforms and one-hot encoded instrument labels. The first
+            step of our model is to perform a CLIP-style process to map our input labels and 1D waveforms
+            into the same latent space. To achieve this, we define 2 encoder blocks that map the one hot
+            encoded conditioning vector and audio sample into the same latent space.
+          </p>
+          <ul>
+            <li><strong>Conditioning Vector:</strong> To map the input one-hot encoded conditioning vector, our goal is to build an embedding lookup table for each instrument class. Given an instrument class we use `nn.Linear` layers to map this into a 64-dimensional vector.</li>
+            <li><strong>Audio Sample:</strong> For the audio sample, we use `nn.Linear` layers to condense the high dimensional waveform to a similar 64-dimensional vector, effectively averaging across prominent features of the input waveform.</li>
+          </ul>
+          <p>
+            Our goal is to map the transformed conditioning vector and waveform vector to be as close as
+            possible, similar to an InfoNCE style query-document retrieval system. This enables an
+            understanding of what each instrument group sounds like, allowing us to map specific audio
+            features to instrument labels. The output 64-dimensional conditioning vector serves as the
+            representation of conditioning needed to take place in the audio denoising process in the
+            U-Net self-attention block.
+          </p>
+          <p>
+            A 64-dimensional space was chosen so as to not increase the size of the model and parameter
+            count that would otherwise not be feasible to train on consumer hardware.
+          </p>
+          <h3>U-Net Based Self Attention</h3>
+          <p>
+            Traditionally, U-Nets are used with 2D images, where subsequent layers downsample the input
+            image and then map features from downsampling as the image is upsampled back to its original
+            dimensions. Here, we use an augmented U-Net architecture that supports 1D inputs for our
+            supplied waveform as provided by the tiny-audio-diffusion project.
+          </p>
+          <figure class="section-visual medium-figure">
+            <img
+              src="https://cdn-images-1.medium.com/max/512/1*PCFMNfyK7LaJ8UIwLOfXXw.png"
+              alt="U-Net architecture figure from the project writeup.">
+          </figure>
+          <p>
+            As the 1D waveform is inputted into the model, convolutional layers capture features at
+            differing levels of granularity while max pooling downsamples the input. Upon reaching the
+            bottom, otherwise known as the bottleneck layer, a complete embedding of the input waveform
+            feature space is made with features captured at different granularities. Thus at each previous
+            block, we capture the Q, K, and V vectors used for self-attention.
+          </p>
+          <p>
+            Upon upsampling from the bottleneck, the skip connection layers map these previously defined
+            features at varying granularities back into an upsampled output waveform. This allows temporal
+            mixing of past features at various levels of granularity to be supplied and interact with the
+            output feature space. While this U-Net design captures local waveform dependencies, it does not
+            capture long-range dependencies and interactions as seen in Transformer-based architectures.
+          </p>
+          <p>
+            Typically, a self-attention U-Net is only able to support a specific type of denoising
+            prominent to a single instrument group. We augmented this to allow the U-Net to be effective
+            at denoising across multiple instrument groups by inputting the learned conditioning vector
+            from the contrastive learning block. This is done by passing this vector into the
+            `embedding_features` channel. Thus, the conditioning vector persists as a background signal
+            that enables the model to understand which features from the input noisy waveform correspond
+            to actual features from the instrument class. At the end, this is compared against the
+            corresponding clean waveform to evaluate overall performance.
+          </p>
+        </article>
+
+        <article class="architecture-section">
+          <h2>Experiments And Findings</h2>
+          <p>
+            The first model was trained on 7 instrument classes using a 5000/100/100
+            train, validation, and test split. The dataset included a wide range of
+            pitches from MIDI notes 48 to 72 for each instrument.
+          </p>
+          <section class="audio-group" aria-labelledby="experiment-1-title">
+            <h3 id="experiment-1-title">Experiment 1: Style Transfer</h3>
+            <p>
+              Our goal was to see if the model could alter the timbre of an existing
+              sound while maintaining its underlying structure. We inputted a clean
+              sample of a bass instrument but passed the one-hot conditioning vector
+              for a brass instrument. The model successfully resynthesized the audio,
+              shifting the acoustic characteristics to sound like brass.
+            </p>
+            <div class="soundcloud-grid">
+              <iframe title="Original bass sample" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/2312477750&color=%235c7cfa&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false"></iframe>
+              <iframe title="Bass output sample" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/2312477963&color=%235c7cfa&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false"></iframe>
+              <iframe title="Bass to brass exaggerated output" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/2312478188&color=%235c7cfa&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false"></iframe>
+            </div>
+            <p>
+              While this model excelled at modifying existing audio, it failed at pure
+              generation. When we asked it to generate an instrument from pure static,
+              the output sounded horrible. Because the model had learned such a wide
+              range of pitches (48 to 72), it essentially tried to average all those
+              pitches together, resulting in incoherent noise.
+            </p>
+          </section>
+          <section class="audio-group" aria-labelledby="experiment-2-title">
+            <h3 id="experiment-2-title">Experiment 2: Targeted Denoising</h3>
+            <p>
+              Using the same broad-pitch model, we tested its ability to recover audio.
+              We took a clean sample directly from the NSynth dataset, injected heavy
+              Gaussian noise using a noise scale of 0.8, and supplied the model with
+              the known reference class for that instrument.
+            </p>
+            <div class="soundcloud-grid">
+              <iframe title="Reference bass sample" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/2312490974&color=%235c7cfa&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false"></iframe>
+              <iframe title="Noisy bass sample" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/2312491064&color=%235c7cfa&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false"></iframe>
+              <iframe title="Generated denoised bass sample" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/2312491169&color=%235c7cfa&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false"></iframe>
+            </div>
+            <p>
+              Because diffusion models are inherently trained by predicting and removing
+              Gaussian noise, our model acted as a highly advanced, instrument-specific
+              filter. To move beyond subjective listening tests, we quantified the
+              recovery using two metrics: Time-Frequency PSNR (Peak Signal-to-Noise Ratio)
+              against the clean reference, and the Before/After Mel Power Difference to
+              verify that the perceptual acoustic features were accurately reconstructed.
+            </p>
+          </section>
+          <figure class="section-visual medium-figure">
+            <img
+              src="https://cdn-images-1.medium.com/max/977/0*TZDWPJpOa5dJUnIA"
+              alt="PSNR comparison figure from the project writeup.">
+            <figcaption>PSNR comparison for reconstructed waveforms.</figcaption>
+          </figure>
+          <figure class="section-visual medium-figure">
+            <img
+              src="https://cdn-images-1.medium.com/max/1024/0*31SdgLIhxwVZ2xyq"
+              alt="Mel power difference figure from the project writeup.">
+            <figcaption>Mel power differences for restored instrument characteristics.</figcaption>
+          </figure>
+          <section class="audio-group" aria-labelledby="single-pitch-title">
+            <h3 id="single-pitch-title">Model 2: The Single Pitch Model</h3>
+            <p>
+              To solve the pure generation failure from Experiment 1, we realized we
+              needed to reduce the variance in pitch in our training data. We created
+              a new dataset of the same 7 instruments, but this time, we only used
+              samples playing a single note: Middle C (MIDI note 60).
+            </p>
+          </section>
+          <section class="audio-group" aria-labelledby="experiment-3-title">
+            <h3 id="experiment-3-title">Experiment 3: Pure Generation</h3>
+            <p>
+              Now, the model no longer had to guess which note to generate. It only
+              had to learn the timbre of the instrument. When we inputted pure static
+              and conditioned it on specific instrument classes, we were able to
+              achieve decent results of distinct instrument sounds playing Middle C
+              from nothing but noise. Below are a couple examples of reed and keyboard
+              generation.
+            </p>
+            <div class="soundcloud-grid">
+              <iframe title="Input noise sample" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/2312501360&color=%235c7cfa&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false"></iframe>
+              <iframe title="Keyboard generation sample" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/2312501606&color=%235c7cfa&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false"></iframe>
+              <iframe title="Reed generation sample" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/2312501726&color=%235c7cfa&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false"></iframe>
+            </div>
+          </section>
+        </article>
+
+        <article class="architecture-section">
+          <h2>Future Improvements</h2>
+          <ul>
+            <li><strong>Conditioning on both instrument and pitch:</strong> We could condition the model on instrument and pitch simultaneously. By passing a combined conditioning vector, a single model could learn to generate any instrument at any specific pitch from pure noise. However, this would require a lot more computation and training data.</li>
+            <li><strong>Transformer-based architecture:</strong> As noted in the architecture section, U-Nets excel at local waveform dependencies through convolutional downsampling, but they can struggle with long-range temporal context. Replacing or augmenting the U-Net bottleneck with a Transformer block is a logical next step. This would better allow the model to capture the sustained harmonics and complex decays inherent in musical notes.</li>
+            <li><strong>Real-world background noise:</strong> Currently, our model acts as a good filter for synthetic Gaussian noise, which matches the noise injection process used in diffusion training. Moving forward, we would want to evaluate and train the model against real-world environmental noise such as room reverberation or recording static. This would test the model's practicality for real audio restoration tasks, which was our original inspiration for the project.</li>
+          </ul>
+        </article>
+      </section>
+    </main>
+  </body>
+</html>
