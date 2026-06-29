@@ -1,0 +1,126 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1180 690" role="img" aria-labelledby="title desc">
+  <title id="title">LHRE telemetry remote server stack flowchart</title>
+  <desc id="desc">Flowchart of server_devtool services arranged as simple left-to-right lanes.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+      <path d="M1 1 L9 5 L1 9 Z" fill="#334155"/>
+    </marker>
+    <style>
+      .bg { fill: #f8fafc; }
+      .group { fill: #ffffff; stroke: #cbd5e1; stroke-width: 1.2; rx: 8; }
+      .box { fill: #ffffff; stroke: #94a3b8; stroke-width: 1.4; rx: 8; }
+      .core { fill: #eef6ff; stroke: #7aa4d8; }
+      .store { fill: #edf8f3; stroke: #7ab99f; }
+      .stream { fill: #f4efff; stroke: #a895d8; }
+      .app { fill: #fff7df; stroke: #d6ae46; }
+      .log { fill: #fff0ee; stroke: #d89b92; }
+      .title { font: 700 24px Arial, Helvetica, sans-serif; fill: #172033; }
+      .group-title { font: 700 15px Arial, Helvetica, sans-serif; fill: #334155; }
+      .label { font: 700 15px Arial, Helvetica, sans-serif; fill: #172033; }
+      .small { font: 12px Arial, Helvetica, sans-serif; fill: #475569; }
+      .data { fill: none; stroke: #1d4f91; stroke-width: 2.3; marker-end: url(#arrow); }
+      .logs { fill: none; stroke: #b45309; stroke-width: 2.3; marker-end: url(#arrow); }
+    </style>
+  </defs>
+
+  <rect class="bg" width="1180" height="690"/>
+  <text class="title" x="50" y="46">LHRE Remote Server Stack</text>
+  <text class="small" x="50" y="68">Server services from server_devtool.sh and Docker Compose.</text>
+
+  <rect class="group" x="50" y="95" width="1080" height="116"/>
+  <text class="group-title" x="75" y="124">Inbound telemetry</text>
+
+  <rect class="box core" x="90" y="148" width="180" height="52"/>
+  <text class="label" x="137" y="171">Car / BEVO</text>
+  <text class="small" x="130" y="189">MQTT + Protobuf</text>
+
+  <rect class="box core" x="345" y="148" width="180" height="52"/>
+  <text class="label" x="397" y="171">mosquitto</text>
+  <text class="small" x="393" y="189">MQTT broker</text>
+
+  <rect class="box core" x="600" y="148" width="180" height="52"/>
+  <text class="label" x="649" y="171">ingest</text>
+  <text class="small" x="628" y="189">MQTT handler/router</text>
+
+  <rect class="box core" x="855" y="148" width="180" height="52"/>
+  <text class="label" x="904" y="171">server_devtool</text>
+  <text class="small" x="904" y="189">starts + logs stack</text>
+
+  <path class="data" d="M270 174 H345"/>
+  <path class="data" d="M525 174 H600"/>
+  <path class="data" d="M780 174 H855"/>
+
+  <rect class="group" x="50" y="248" width="1080" height="104"/>
+  <text class="group-title" x="75" y="277">Persistent history lane</text>
+
+  <rect class="box core" x="90" y="292" width="180" height="52"/>
+  <text class="label" x="137" y="315">ingest writer</text>
+  <text class="small" x="127" y="333">serialized packets</text>
+
+  <rect class="box store" x="345" y="292" width="180" height="52"/>
+  <text class="label" x="388" y="315">PostgreSQL</text>
+  <text class="small" x="368" y="333">packet-indexed tables</text>
+
+  <rect class="box app" x="600" y="292" width="180" height="52"/>
+  <text class="label" x="652" y="315">Grafana</text>
+  <text class="small" x="632" y="333">retrospective plots</text>
+
+  <rect class="box app" x="855" y="292" width="180" height="52"/>
+  <text class="label" x="906" y="315">viewer_tool</text>
+  <text class="small" x="894" y="333">queries + exports</text>
+
+  <path class="data" d="M270 318 H345"/>
+  <path class="data" d="M525 318 H600"/>
+  <path class="data" d="M780 318 H855"/>
+
+  <rect class="group" x="50" y="389" width="1080" height="104"/>
+  <text class="group-title" x="75" y="418">Realtime stream lane</text>
+
+  <rect class="box core" x="90" y="433" width="180" height="52"/>
+  <text class="label" x="130" y="456">ingest publisher</text>
+  <text class="small" x="138" y="474">live packets</text>
+
+  <rect class="box stream" x="318" y="433" width="165" height="52"/>
+  <text class="label" x="356" y="456">kafka-bridge</text>
+  <text class="small" x="359" y="474">gRPC ingress</text>
+
+  <rect class="box stream" x="530" y="433" width="165" height="52"/>
+  <text class="label" x="594" y="456">Kafka</text>
+  <text class="small" x="572" y="474">live topic buffer</text>
+
+  <rect class="box stream" x="742" y="433" width="165" height="52"/>
+  <text class="label" x="766" y="456">processors</text>
+  <text class="small" x="757" y="474">gps / lap / track</text>
+
+  <rect class="box app" x="954" y="433" width="145" height="52"/>
+  <text class="label" x="990" y="456">dashboards</text>
+  <text class="small" x="993" y="474">live views</text>
+
+  <path class="data" d="M270 459 H318"/>
+  <path class="data" d="M483 459 H530"/>
+  <path class="data" d="M695 459 H742"/>
+  <path class="data" d="M907 459 H954"/>
+
+  <rect class="group" x="50" y="530" width="1080" height="104"/>
+  <text class="group-title" x="75" y="559">Log recovery lane</text>
+
+  <rect class="box log" x="90" y="574" width="180" height="52"/>
+  <text class="label" x="126" y="597">BEVO loggerd</text>
+  <text class="small" x="136" y="615">CSV logs on Pi</text>
+
+  <rect class="box log" x="345" y="574" width="180" height="52"/>
+  <text class="label" x="411" y="597">logsync</text>
+  <text class="small" x="386" y="615">pulls staged logs</text>
+
+  <rect class="box log" x="600" y="574" width="180" height="52"/>
+  <text class="label" x="654" y="597">staged CSVs</text>
+  <text class="small" x="643" y="615">server-side replay</text>
+
+  <rect class="box store" x="855" y="574" width="180" height="52"/>
+  <text class="label" x="898" y="597">PostgreSQL</text>
+  <text class="small" x="904" y="615">replayed history</text>
+
+  <path class="logs" d="M270 600 H345"/>
+  <path class="logs" d="M525 600 H600"/>
+  <path class="logs" d="M780 600 H855"/>
+</svg>

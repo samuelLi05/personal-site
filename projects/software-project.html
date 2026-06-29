@@ -3,8 +3,8 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Software project page for Samuel Li.">
-    <title>Owned Code Project | Samuel Li</title>
+    <meta name="description" content="Contrastive Audio Diffusion project page for Samuel Li.">
+    <title>Contrastive Audio Diffusion | Samuel Li</title>
     <link rel="stylesheet" href="../styles.css?v=20260618-layout">
   </head>
   <body>
@@ -20,28 +20,113 @@
       </nav>
     </header>
 
-    <main class="page project-page">
+    <main class="page project-page portfolio-project-page">
       <a class="back-link" href="../index.html#projects">Back to projects</a>
       <section class="project-header">
-        <h1>Owned Code Project</h1>
-        <p>Full-stack, systems, data, or tooling.</p>
-      </section>
-
-      <section class="detail-grid">
-        <h2>Overview</h2>
-        <p>
-          Placeholder for a software project where you own the implementation. This page can describe
-          the problem, architecture, technical choices, and impact.
+        <h1>Contrastive Audio Diffusion</h1>
+        <p>Conditional waveform diffusion for audio denoising and instrument-guided generation.</p>
+        <p class="paper-authors">Samuel Li, Zachary Houlton, Ariv Mondal, Daniel Zhu</p>
+        <p class="project-actions">
+          <a href="https://github.com/samuelLi05/contrastive-audio-diffusion">Code</a>
+          <a href="https://medium.com/@zacharyhoulton/audio-denoising-using-diffusion-c2ae04d20c4e">Medium writeup and audio examples</a>
         </p>
       </section>
 
-      <section class="detail-grid">
-        <h2>Details</h2>
-        <ul>
-          <li>Repository and demo links.</li>
-          <li>Architecture and stack.</li>
-          <li>Interesting implementation decisions.</li>
-        </ul>
+      <section class="project-intro">
+        <p>
+          Contrastive Audio Diffusion is a team project built around audio denoising with diffusion models.
+          The Medium writeup is the listening-facing artifact for the project: it explains the diffusion
+          setup and includes the embedded audio snippets for comparing noisy inputs and denoised outputs.
+          This page is the technical companion, focused on the ML design and software architecture behind
+          those experiments.
+        </p>
+        <p>
+          The codebase extends the original tiny-audio-diffusion starting point into a conditional waveform
+          diffusion system. The main additions are the NSynth data pipeline, instrument-label conditioning,
+          contrastive alignment between label and audio embeddings, reproducible Hydra experiment configs,
+          evaluation scripts, and a Django inference interface.
+        </p>
+      </section>
+
+      <section class="audio-examples" aria-labelledby="audio-examples-title">
+        <h2 id="audio-examples-title">Audio Examples</h2>
+        <p>
+          These SoundCloud snippets are the listening examples embedded in the Medium writeup.
+        </p>
+
+        <section class="audio-group" aria-labelledby="style-transfer-title">
+          <h3 id="style-transfer-title">Style Transfer</h3>
+          <div class="soundcloud-grid">
+            <iframe title="Original bass sample" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/2312477750&color=%235c7cfa&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false"></iframe>
+            <iframe title="Bass output sample" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/2312477963&color=%235c7cfa&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false"></iframe>
+            <iframe title="Bass to brass exaggerated output" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/2312478188&color=%235c7cfa&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false"></iframe>
+          </div>
+        </section>
+
+        <section class="audio-group" aria-labelledby="denoising-title">
+          <h3 id="denoising-title">Targeted Denoising</h3>
+          <div class="soundcloud-grid">
+            <iframe title="Reference bass sample" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/2312490974&color=%235c7cfa&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false"></iframe>
+            <iframe title="Noisy bass sample" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/2312491064&color=%235c7cfa&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false"></iframe>
+            <iframe title="Generated denoised bass sample" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/2312491169&color=%235c7cfa&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false"></iframe>
+          </div>
+        </section>
+
+        <section class="audio-group" aria-labelledby="generation-title">
+          <h3 id="generation-title">Pure Generation</h3>
+          <div class="soundcloud-grid">
+            <iframe title="Input noise sample" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/2312501360&color=%235c7cfa&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false"></iframe>
+            <iframe title="Keyboard generation sample" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/2312501606&color=%235c7cfa&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false"></iframe>
+            <iframe title="Reed generation sample" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/2312501726&color=%235c7cfa&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false"></iframe>
+          </div>
+        </section>
+      </section>
+
+      <section class="architecture-sections" aria-label="Contrastive audio diffusion architecture">
+        <article class="architecture-section">
+          <h2>Data Pipeline</h2>
+          <p>
+            The dataset layer is designed around a stable sample dictionary instead of the raw NSynth folder
+            layout. Each item resolves clean and optional noisy waveform tensors from JSONL metadata, normalizes
+            sample rate and length, and returns the waveform, split, instrument class, class id, and optional
+            conditioning vector through the same interface.
+          </p>
+          <p>
+            This lets the same model code run on locally prepared subsets, processed dataset exports, and
+            clean-only datasets. When a noisy waveform is missing, the loader falls back to the clean waveform,
+            allowing the training and evaluation pipeline to keep one contract while the dataset source changes.
+          </p>
+        </article>
+
+        <article class="architecture-section">
+          <h2>Model Architecture</h2>
+          <p>
+            The denoiser is a 1D U-Net wrapped by a diffusion sampler. The project compares one-hot conditioning
+            against learnable label embeddings, with optional cross-attention so class information can condition
+            the denoising process without treating the label vector as another audio channel.
+          </p>
+          <p>
+            The contrastive path aligns audio embeddings with label embeddings during training. In the embedding
+            model, the diffusion loss teaches waveform denoising while the auxiliary contrastive loss pushes
+            matching instrument labels and audio clips closer in latent space and separates mismatched pairs.
+          </p>
+        </article>
+
+        <article class="architecture-section">
+          <h2>Inference And Evaluation</h2>
+          <p>
+            The inference layer reuses the same checkpoint and config artifacts instead of depending on notebook
+            state. The Django demo loads a selected model, accepts either uploaded reference audio or a metadata
+            sample, prepares the target conditioning, runs the sampler, and returns audio outputs with benchmark
+            timing records.
+          </p>
+          <p>
+            The evaluation tools report waveform error, SNR, SNR improvement, timing, GPU memory, and
+            time-frequency error visualizations. That makes the demo more than playback: it helps identify
+            whether failures are concentrated in transients, sustained harmonics, low-frequency energy, or
+            specific time windows.
+          </p>
+        </article>
       </section>
     </main>
   </body>

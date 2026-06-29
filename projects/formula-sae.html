@@ -3,8 +3,8 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Formula SAE project page for Samuel Li.">
-    <title>Formula SAE | Samuel Li</title>
+    <meta name="description" content="Formula SAE telemetry architecture project page for Samuel Li.">
+    <title>Formula SAE Telemetry | Samuel Li</title>
     <link rel="stylesheet" href="../styles.css?v=20260618-layout">
   </head>
   <body>
@@ -20,28 +20,134 @@
       </nav>
     </header>
 
-    <main class="page project-page">
+    <main class="page project-page telemetry-page">
       <a class="back-link" href="../index.html#projects">Back to projects</a>
       <section class="project-header">
-        <h1>Formula SAE Engineering Work</h1>
-        <p>Vehicle systems, controls, data, manufacturing</p>
-      </section>
-
-      <section class="detail-grid">
-        <h2>Overview</h2>
+        <h1>LHRE Vehicle Telemetry System</h1>
         <p>
-          Placeholder for the Formula SAE story: the team context, your ownership area, the technical
-          problem, and the result. This page can include photos, CAD screenshots, test data, and design notes.
+          A distributed data acquisition and analysis stack for Longhorn Racing Electric Formula SAE vehicles.
+        </p>
+        <p class="project-actions">
+          <a href="https://github.com/LonghornRacingElectric/lhre-2026">Code</a>
         </p>
       </section>
 
-      <section class="detail-grid">
-        <h2>Highlights</h2>
-        <ul>
-          <li>Subsystem or component owned.</li>
-          <li>Engineering tradeoffs and constraints.</li>
-          <li>Testing, validation, manufacturing, or competition outcomes.</li>
-        </ul>
+      <section class="project-intro">
+        <p>
+          The LHRE telemetry system is a distributed data acquisition and analysis software stack designed
+          to provide visibility of vehicle behavior without interfering with critical vehicle control
+          systems. The objective of the telemetry software stack is to enable concurrent collection,
+          transmission, and visualization of high-frequency vehicular data for real-time and retrospective
+          analysis.
+        </p>
+        <p>
+          The LHRE telemetry system employs a distributed architecture that integrates on-car data
+          aggregation with remote processing through a 5G cellular link to provide vehicle visibility.
+          On the vehicle, a Raspberry Pi compute module reads sensor data over two CAN buses and serializes
+          it using Protocol Buffers for efficient transmission over 5G cellular via an MQTT client.
+        </p>
+      </section>
+
+      <figure class="project-figure architecture-figure">
+        <img
+          src="../assets/formula-sae/lhre-telemetry-data-pipeline.png"
+          alt="LHRE telemetry data pipeline diagram showing car, MQTT handler, database, Kafka producer, Grafana dashboards, processors, web server, and web applications.">
+        <figcaption>
+          The telemetry pipeline separates on-car acquisition, server-side storage and distribution, and
+          application-layer visualization.
+        </figcaption>
+      </figure>
+
+      <section class="architecture-sections" aria-label="Telemetry architecture sections">
+        <article class="architecture-section">
+          <h2>On-Car Data Acquisition Design</h2>
+          <p>
+            The on-car Raspberry Pi software is designed to continuously acquire, package, and distribute
+            vehicle telemetry without introducing blocking behavior that could disrupt real-time operation.
+            To achieve this, the software simultaneously monitors both vehicle CAN buses, aggregates and
+            serializes sensor data using Protocol Buffers, and manages downstream consumers including local
+            storage, the driver dash screen, and a remote MQTT broker over a 5G cellular link.
+          </p>
+          <p>
+            The data acquisition software is decomposed into four parallel daemons that communicate through
+            Unix domain sockets and coordinate shared state using mutex-protected data structures. The CAN
+            daemon monitors both CAN buses and serializes vehicle data into a centralized Protobuf schema.
+            The publisher daemon provides the interface between on-car acquisition and the remote server,
+            the logger daemon records local CSV backups on the Raspberry Pi, and the dash daemon forwards
+            telemetry to the on-car dashboard display through a WebSocket connection.
+          </p>
+          <p>
+            This on-car layer runs on BEVO, the Board Emitted Vehicular Outputs board. BEVO is the telemetry
+            board built around a Raspberry Pi, giving the vehicle a dedicated compute target for collecting
+            and forwarding telemetry without sharing resources with the embedded control boards.
+          </p>
+          <figure class="section-visual bevo-visual">
+            <img
+              src="../assets/formula-sae/bevo-board.png"
+              alt="BEVO telemetry board with Raspberry Pi module.">
+            <figcaption>BEVO, the Board Emitted Vehicular Outputs telemetry board.</figcaption>
+          </figure>
+        </article>
+
+        <article class="architecture-section">
+          <h2>Remote Server</h2>
+          <p>
+            The remote server is designed as a distributed processing hub that ingests serialized data from
+            the Raspberry Pi and routes it into persistent PostgreSQL storage and an Apache Kafka stream for
+            real-time analysis. The system utilizes a containerized microservices approach, employing
+            independent Docker instances for the MQTT message broker, server MQTT clients, PostgreSQL
+            database, and Apache Kafka distributor.
+          </p>
+          <p>
+            The MQTT broker supports both local development and production communication with the
+            5G-equipped Raspberry Pi. Server MQTT clients route serialized Protocol Buffer messages into
+            PostgreSQL for persistent storage and into Kafka for live distribution. PostgreSQL organizes
+            incoming telemetry around packet identifiers and subsystem tables for dynamics, controls, pack,
+            diagnostics, and thermal data, while Kafka decouples real-time dashboards and processors from
+            the number of active consumers.
+          </p>
+          <figure class="section-visual remote-server-visual">
+            <img
+              src="../assets/formula-sae/remote-server-flowchart.svg"
+              alt="Remote server flowchart showing inbound telemetry, persistent history, realtime stream, and log recovery lanes.">
+            <figcaption>
+              Remote server services organized into inbound telemetry, PostgreSQL history, Kafka streaming,
+              and log recovery paths.
+            </figcaption>
+          </figure>
+        </article>
+
+        <article class="architecture-section">
+          <h2>Applications</h2>
+          <p>
+            The client application layer is designed to convert the PostgreSQL database and Apache Kafka
+            distributor backends into interfaces for real-time analysis. Grafana dashboards and web applications
+            read from the server-side storage and streaming paths to display vehicle dynamics, pack data,
+            controls, diagnostics, and thermal behavior.
+          </p>
+          <p>
+            Real-time applications primarily consume Kafka streams to maintain low-latency updates with many
+            simultaneous viewers, while retrospective applications query PostgreSQL to access complete data
+            history with filtering and event scoping. Grafana is configured for both real-time plotting
+            from Kafka and retrospective plots from PostgreSQL, while the custom web server supports
+            visualization and data-management workflows that extend beyond standard Grafana panels.
+          </p>
+          <figure class="section-visual">
+            <img
+              src="../assets/formula-sae/grafana-inverter-temps.png"
+              alt="Grafana dashboard panels plotting inverter and coolant temperatures over time.">
+            <figcaption>Grafana panels visualizing inverter and thermal telemetry from vehicle runs.</figcaption>
+          </figure>
+        </article>
+      </section>
+
+      <section class="project-intro closing-note">
+        <p>
+          By isolating telemetry workloads from critical vehicle control functions and using a remote server
+          for processing and storage, the system enables consistent access to vehicular data without
+          impacting control performance. This design provides a foundation for hardware-in-the-loop testing
+          and vehicle modeling, supporting data-driven iteration and improvement for future vehicles.
+        </p>
       </section>
     </main>
   </body>
