@@ -254,11 +254,6 @@ h3 {
   object-fit: contain;
 }
 
-.placeholder-figure {
-  height: 180px;
-  background: var(--subtle);
-}
-
 .entry-body p {
   margin-bottom: 0.45rem;
 }
