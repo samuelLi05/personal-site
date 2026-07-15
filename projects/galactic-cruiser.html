@@ -65,9 +65,9 @@
           </p>
           <p>
             The logic we used for updating the screen also follows controlled flow. In the asteroid class,
-            we have 3 asteroid variables that are initially set to `NULL` and, after they pass a certain
-            `x` and `y` value, get reset to `NULL`. Whenever an asteroid object is `NULL`, the program chooses
-            a new spawning point for that asteroid. This controlled logic ensures that only 3 asteroids are
+            we have three asteroid variables that are initially set to `NULL` and get reset to `NULL` after
+            passing certain `x` and `y` coordinates. Whenever an asteroid object is `NULL`, the program chooses
+            a new spawning point for that asteroid. This controlled logic ensures that only three asteroids are
             on the screen at any given time. We use the same idea more generally throughout the game: objects
             are only updated once the data they depend on has already been produced, and if something has not
             yet been reinitialized, it either retains its last valid value or falls back to its default state.
@@ -77,15 +77,15 @@
         <article class="architecture-section">
           <h2>Hardware Bring-Up</h2>
           <p>
-            We structured the development of the game around each respective hardware component and got
-            baseline features of the hardware to work in relation to the software. We developed driver code
+            We structured the game's development around each hardware component and established baseline
+            hardware functionality before integrating the software. We developed driver code
             for I2C to interface with the gyroscope as well as ST7735 display code to create the stars and
             background effects for the game. We then assembled all hardware features on a PCB and individually
             tested the functionality of the DAC, switches, LEDs, and analog input paths with driver code from
             previous 319K labs.
           </p>
           <p>
-            Since the main functionality of the game is the display in relation to gyroscope readings, we
+            Because the game's core interaction links the display to gyroscope readings, we
             then modularized the gyroscope and display code so that they could be run together in the main
             function. Gyroscope readings are captured through a timer interrupt, read over `I2C1`, and then
             processed by the `Player` class before being reflected on the display. In the current codebase,
@@ -114,7 +114,7 @@
         </article>
 
         <article class="architecture-section">
-          <h2>Controls And Iteration</h2>
+          <h2>Controls and Iteration</h2>
           <p>
             To make the game fun to play, we considered how to make it intuitive and easy to learn while still
             being difficult to master. We did this by intentionally mapping which physical controls were
@@ -122,7 +122,7 @@
             movement and the SlidePot for aiming.
           </p>
           <p>
-            We tested the game by having other peers try it and give us feedback, then tuned the game from
+            We tested the game by having peers try it and give us feedback, then tuned the game from
             there. One suggestion we implemented was making the game wireless, which we achieved by using a
             remote AA battery pack as the power source. That made the control scheme feel much more natural
             during playtesting and better matched the handheld format of the project.

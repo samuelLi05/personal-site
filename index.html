@@ -35,14 +35,14 @@
 
         <div class="profile-copy">
           <h1 id="profile-title">Samuel Li</h1>
-          <p class="subtitle">ECE student</p>
+          <p class="subtitle">ECE Student</p>
           <p>
             I am an Electrical and Computer Engineering major at The University of Texas at
             Austin, where I am part of the ECE Honors Program and Engineering Honors Program.
           </p>
-          <p>I'm particularly interested in ML infrastructure, Gen AI, and systems programming.
-             At UT Austin, I am involved in undergraduate research and am a system lead on Longhorn Racing Electric - FSAE EV. 
-             Outside of school, I enjoy playing pickleball and watching sports. 
+          <p>I'm particularly interested in ML infrastructure, generative AI, and systems programming.
+             At UT Austin, I am involved in undergraduate research and serve as a system lead for Longhorn Racing Electric's Formula SAE EV team.
+             Outside of school, I enjoy playing pickleball and watching sports.
           </p>
 
           <ul class="contact-list" id="contact" aria-label="Contact information">
@@ -62,8 +62,6 @@
           <article class="research-entry">
             <div class="entry-body">
               <h3>Characterizing Opinion Evolution of Networked LLMs</h3>
-              <p class="paper-authors">Caleb Probine, Yigit Ege Bayiz, Filippos Fotiadis, Samuel Li, Yunhao Yang, Ufuk Topcu</p>
-              <p class="paper-venue">Submitted to EMNLP 2026</p>
               <p>
                 We study opinion evolution in networks of LLM agents, where each agent holds a stance
                 and updates it after seeing messages from its neighbors. We fit classical
@@ -166,11 +164,12 @@
           <li>
             <div class="time">May 2026 - Aug 2026</div>
             <div>
-              <h3>Firmware Engineer Intern, Hewlett Packard Enterprise</h3>
+              <h3>Firmware Engineer Intern, Hewlett Packard Enterprise (HPE)</h3>
               <ul>
                 <li>Extended HPE's EDK2-based UEFI shell in C by integrating libc and Python for platform validation and debugging.</li>
-                <li>Expanded edk2-libc CPython runtime coverage by porting LZMA, SQLite, and OpenSSL-backed SSL/TLS support while evaluating compatibility with newer CPython versions.</li>
-                <li>Validated UEFI firmware using Intel Simics and hardware-based ROM flashing on Intel and AMD server platforms. </li>
+                <li>Implemented previously unsupported Python networking support in UEFI, enabling socket communication, DNS resolution, and SSL/TLS connections.</li>
+                <li>Expanded UEFI firmware validation tooling by porting LZMA compression and SQLite database support.</li>
+                <li>Developed Python bindings to access UEFI Boot and Runtime Services, ACPI tables, and SMBIOS data.</li>
               </ul>
             </div>
           </li>
@@ -179,21 +178,20 @@
             <div>
               <h3>Research Assistant, Autonomous Systems Group, UT Austin</h3>
               <ul>
-                <li>Conducted research on LLM autonomous systems, focusing on NLP, opinion dynamics, and human-AI interaction.</li>
-                <li>Built a simulation framework in Python using Hugging Face Transformers and SBERT to model stance evolution in social networks composed of LLM agents.</li>
-                <li>Designed opinion prediction pipelines using convex optimization with CVXPY and SLSQP optimization with SciPy to estimate agent influence and predict opinion evolution in LLM social networks.</li>
-                <li>Developed confidence-aware decision-making pipelines using contrastive learning, DPO, and uncertainty estimation to improve agent planning and user intent understanding.</li>
-                <li>Co-author on "Characterizing Opinion Evolution of Networked LLMs" (Submitted to EMNLP 2026).</li>
-                <li>Co-author on "Foundation Models for Logistics Operations: Toward Certifiable, Conversational Interfaces" (NeuS 2026).</li>
+                <li>Built a simulation framework in Python using Hugging Face Transformers and SBERT to study opinion evolution in social networks composed of LLM agents.</li>
+                <li>Designed prediction pipelines using CVXPY and SciPy to quantify social influence and prior-belief effects in LLMs.</li>
+                <li>Developed uncertainty-aware agent pipelines using contrastive learning and DPO to detect ambiguous user intent, request clarification, and improve planning reliability.</li>
+                <li>Co-author of "Characterizing Opinion Evolution of Networked LLMs" (submitted to EMNLP 2026).</li>
+                <li>Co-author of "Foundation Models for Logistics Operations: Toward Certifiable, Conversational Interfaces" (NeuS 2026).</li>
               </ul>
             </div>
           </li>
           <li>
             <div class="time">May 2025 - Aug 2025</div>
             <div>
-              <h3>Software Engineer Intern, Electronic Arts</h3>
+              <h3>Software Engineer Intern, Electronic Arts (EA)</h3>
               <ul>
-                <li>Architected a multi-agent LLM CI/CD optimization system in Python using conditional compilation checks and RAG-based code cross-referencing to selectively run build targets, cutting pipeline runtime by ~75%.</li>
+                <li>Architected a multi-agent LLM CI/CD optimization system in Python that analyzes code changes using RAG-based code cross-referencing to selectively run build targets, cutting pipeline runtime by ~75%.</li>
                 <li>Built async MCP servers in Python to provide LLM agents with tool-calling access to GitLab and Jenkins.</li>
                 <li>Implemented RAG-based technical assistants and deployed production systems via GitLab CI runners.</li>
               </ul>
@@ -202,7 +200,7 @@
           <li>
             <div class="time">Sept 2024 - Present</div>
             <div>
-              <h3>Lead Software Engineer, Longhorn Racing Electric</h3>
+              <h3>Lead Software Engineer, Longhorn Racing Electric (Formula SAE)</h3>
               <ul>
                 <li>Architected a real-time vehicular telemetry system, streaming CAN bus data from Rust-based embedded systems to the cloud via MQTT, Protobuf, and 5G to enable analytics pipelines and data-driven engineering decisions.</li>
                 <li>Engineered real-time Python/Go Kafka pipelines with PostgreSQL and gRPC for high-throughput data ingestion at 100 Hz across 60,000 data points/sec.</li>
@@ -216,8 +214,7 @@
               <h3>Research Intern, Applied Research Laboratories, UT Austin</h3>
               <ul>
                 <li>Developed computer vision pipelines in PyTorch to process drone-based visible and thermal imagery.</li>
-                <li>Implemented U-Net CNN for thermal segmentation and unsupervised gradient-based clustering for visible imagery.</li>
-                <li>Engineered a Structure from Motion (SfM) pipeline using OpenCV to generate 3D reconstructions from aerial data.</li>
+                <li>Implemented a U-Net CNN for thermal segmentation and unsupervised gradient-based clustering for visible imagery.</li>
               </ul>
             </div>
           </li>
